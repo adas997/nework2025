@@ -1,0 +1,23 @@
+sources:
+  - name: stg_source
+    schema: staging
+
+    tables:
+      - name: account
+        identifier: stg_salesforce__account 
+      - name: campaign
+        identifier: stg_salesforce__campaign
+      - name: contact
+        identifier: stg_salesforce__contact
+
+      - name: lead
+        identifier: stg_salesforce__lead
+
+      - name: opportunity
+        identifier: stg_salesforce__opportunity
+
+      - name: pricebook
+        identifier: stg_salesforce__pricebook_entry
+
+      - name: product
+        identifier: stg_salesforce__product_2

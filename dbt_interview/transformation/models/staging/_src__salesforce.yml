@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: salesforce
+    database: dbt
+    schema: raw
+    tables:
+      - name: account
+      - name: campaign
+      - name: case
+      - name: case_history_2
+      - name: contact
+      - name: lead
+      - name: opportunity
+      - name: opportunity_history
+      - name: pricebook_entry
+      - name: product_2
+      - name: record_type
+      - name: solution
+      - name: user
+      - name: user_role
