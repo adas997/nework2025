@@ -1,0 +1,878 @@
+version: 2
+models:
+  - name: vw_int_account
+    description: "Intermediate Table to Hold account information"
+    tests :
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_salesforce_account')
+    columns:
+      - name: account_id
+        tests: 
+          - not_null:
+              config:
+                store_failures: true
+          - unique:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: "Account Id - Unique Identifier"
+
+      - name: account_name
+        tests:
+          - not_null:
+              config:
+                store_failures: true
+          - unique:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: "Account Name"
+
+      - name: account_type
+        data_type: varchar
+        description: "Type of Account"
+
+      - name: is_deleted
+        data_type: bigint
+        description: "Checks if the Account is Deleted or Active. Int column. 0- means the account is Deleted and 1 means the account is Active"
+
+      - name: parent_id
+        data_type: varchar
+        description: "Parent Account"
+
+      - name: billing_street
+        data_type: varchar
+        description: "Billing Street"
+
+      - name: billing_city
+        data_type: varchar
+        description: "Billing  City"
+
+      - name: billing_state
+        data_type: varchar
+        description: "Billing  State"
+
+      - name: billing_postal_code
+        data_type: bigint
+        description: "Billing  Postal Code"
+
+      - name: billing_country
+        data_type: varchar
+        description: "Billing  Country"
+
+      - name: shipping_street
+        data_type: varchar
+        description: "Shipping Street"
+
+      - name: shipping_city
+        data_type: varchar
+        description: "Shipping City"
+
+      - name: shipping_state
+        data_type: varchar
+        description: "Shipping State"
+
+      - name: shipping_postal_code
+        data_type: bigint
+        description: "Shipping Postal Code"
+
+      - name: shipping_country
+        data_type: varchar
+        description: "Shipping Country"
+
+      - name: phone
+        data_type: varchar
+        description: "Phone number of the account holder"
+
+      - name: fax
+        data_type: varchar
+        description: ""
+
+      - name: account_number
+        data_type: varchar
+        description: "Account Number"
+
+      - name: industry
+        data_type: varchar
+        description: ""
+
+      - name: annual_revenue
+        tests:
+          - negative_amount:
+              config:
+                store_failures: true
+
+        data_type: bigint
+        description: ""
+
+      - name: number_employees
+        data_type: bigint
+        description: ""
+
+      - name: acc_created_date
+        data_type: timestamp
+        description: ""
+
+      - name: acc_created_by
+        data_type: varchar
+        description: ""
+
+      - name: acc_modified_date
+        data_type: timestamp
+        description: ""
+
+      - name: acc_modified_by
+        data_type: varchar
+        description: ""
+
+  - name: vw_int_campaign
+    description: "Holds Campaign Information"
+    tests :
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_salesforce_campaign')
+    columns:
+      - name: campaign_id
+        tests:
+          - not_null:
+              config:
+                store_failures: true
+          - unique:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: "Campaign Id - Unique identifier"
+
+      - name: campaign_name
+        tests:
+          - not_null:
+              config:
+                store_failures: true
+          - unique:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: "Name of the Campaign"
+
+      - name: is_deleted
+        data_type: bigint
+        description: "Checks if the Campaign is Deleted or Active. Int column. 0- means the Campaign is Deleted and 1 means the Campaign is Active"
+
+      - name: parent_id
+        data_type: varchar
+        description: ""
+
+      - name: campaign_type
+        data_type: varchar
+        description: "Type of Campaign"
+
+      - name: campaign_status
+        data_type: varchar
+        description: "Campaign Status"
+
+      - name: campaign_start_date
+        data_type: timestamp
+        description: ""
+
+      - name: campaign_end_date
+        data_type: timestamp
+        description: ""
+
+      - name: campaign_revenue
+        data_type: bigint
+        description: ""
+
+      - name: campaign_budget
+        data_type: bigint
+        description: ""
+
+      - name: campaign_actual_cost
+        data_type: bigint
+        description: ""
+
+      - name: campaign_description
+        data_type: varchar
+        description: ""
+
+      - name: campaign_owner
+        data_type: varchar
+        description: ""
+
+      - name: cmp_created_date
+        data_type: timestamp
+        description: ""
+
+      - name: cmp_created_by
+        data_type: varchar
+        description: ""
+
+      - name: cmp_modified_date
+        data_type: timestamp
+        description: ""
+
+      - name: cmp_modified_by
+        data_type: varchar
+        description: ""
+
+  - name: vw_int_case
+    description: ""
+    tests :
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_salesforce_case')
+    
+    columns:
+      - name: case_id
+        tests:
+          - unique:
+              config:
+                store_failures: true
+          - not_null:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: "Unique Identifier for Case"
+
+      - name: case_number
+        data_type: varchar
+        description: "Case Number"
+
+      - name: is_deleted
+        data_type: bigint
+        description: "Checks if the Case is Deleted or Active. Int column. 0- means the Case is Deleted and 1 means the Case is Active"
+
+      - name: contact_id
+        tests:
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_contact')
+              field: contact_id
+        data_type: varchar
+        description: ""
+
+      - name: account_id
+        tests:
+          - relationships:
+              config: 
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10"
+                store_failures: true
+              to: ref('vw_int_account')
+              field: account_id
+        data_type: varchar
+        description: ""
+
+      - name: asset_id
+        data_type: varchar
+        description: ""
+
+      - name: product_id
+        tests:
+          - relationships:
+              config: 
+                severity: error 
+                error_if: ">1000"
+                warn_if: ">50"
+                store_failures: true
+              to: ref('vw_int_product')
+              field: product_id
+        data_type: varchar
+        description: ""
+
+      - name: entitlement_id
+        data_type: varchar
+        description: ""
+
+      - name: source_id
+        data_type: varchar
+        description: ""
+
+      - name: businesshours_id
+        data_type: varchar
+        description: ""
+
+      - name: parent_id
+        data_type: varchar
+        description: ""
+
+      - name: supplied_name
+        tests:
+          - contain_special_characters:
+              config:
+                store_failures: true
+        
+        data_type: varchar
+        description: ""
+
+      - name: supplied_email
+        data_type: varchar
+        description: ""
+
+      - name: supplied_phone
+        data_type: varchar
+        description: ""
+
+      - name: supplied_company
+        data_type: varchar
+        description: ""
+
+      - name: type
+        data_type: varchar
+        description: ""
+
+      - name: status
+        data_type: varchar
+        description: ""
+
+      - name: reason
+        data_type: varchar
+        description: ""
+
+      - name: origin
+        data_type: varchar
+        description: ""
+
+      - name: subject
+        data_type: varchar
+        description: ""
+
+      - name: priority
+        data_type: varchar
+        description: ""
+
+      - name: description
+        data_type: varchar
+        description: ""
+
+      - name: stop_start_date
+        data_type: varchar
+        description: ""
+
+      - name: case_created_date
+        data_type: timestamp
+        description: ""
+
+      - name: case_created_by
+        data_type: varchar
+        description: ""
+
+      - name: case_modified_date
+        data_type: timestamp
+        description: ""
+
+      - name: case_modified_by
+        data_type: varchar
+        description: ""
+
+  - name: vw_int_contact
+    description: ""
+    columns:
+      - name: contact_id
+        tests:
+          - not_null 
+          - unique 
+        data_type: varchar
+        description: ""
+
+      - name: account_id
+        tests:
+          - relationships:
+              config: 
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10"
+                store_failures: true
+              to: ref('vw_int_account')
+              field: account_id
+        data_type: varchar
+        description: ""
+
+      - name: salutation
+        data_type: varchar
+        description: ""
+
+      - name: first_name
+        tests:
+          - contain_special_characters:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: ""
+
+      - name: last_name
+        tests:
+          - contain_special_characters:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: ""
+
+      - name: other_street
+        data_type: varchar
+        description: ""
+
+      - name: other_city
+        data_type: varchar
+        description: ""
+
+      - name: other_state
+        data_type: varchar
+        description: ""
+
+      - name: other_country
+        data_type: varchar
+        description: ""
+
+      - name: other_postal_code
+        data_type: bigint
+        description: ""
+
+      - name: mailing_street
+        data_type: varchar
+        description: ""
+
+      - name: mailing_city
+        data_type: varchar
+        description: ""
+
+      - name: mailing_state
+        data_type: varchar
+        description: ""
+
+      - name: mailing_postal_code
+        data_type: bigint
+        description: ""
+
+      - name: mailing_country
+        data_type: varchar
+        description: ""
+
+      - name: phone
+        data_type: varchar
+        description: ""
+
+      - name: fax
+        data_type: varchar
+        description: ""
+
+      - name: mobilephone
+        data_type: varchar
+        description: ""
+
+      - name: homephone
+        data_type: varchar
+        description: ""
+
+      - name: otherphone
+        data_type: varchar
+        description: ""
+
+      - name: assistantphone
+        data_type: varchar
+        description: ""
+
+      - name: reportstoid
+        data_type: varchar
+        description: ""
+
+      - name: email
+        data_type: varchar
+        description: ""
+
+      - name: title
+        data_type: varchar
+        description: ""
+
+      - name: con_created_date
+        data_type: timestamp
+        description: ""
+
+      - name: con_created_by
+        data_type: varchar
+        description: ""
+
+      - name: con_modified_date
+        data_type: timestamp
+        description: ""
+
+      - name: con_modified_by
+        data_type: varchar
+        description: ""
+
+  - name: vw_int_opportunity
+    description: ""
+    columns:
+      - name: opportunity_id
+        data_type: varchar
+        description: ""
+
+      - name: account_id
+        data_type: varchar
+        description: ""
+
+      - name: is_private
+        data_type: varchar
+        description: ""
+
+      - name: is_deleted
+        data_type: bigint
+        description: ""
+
+      - name: opportunity_name
+        data_type: varchar
+        description: ""
+
+      - name: opportunity_description
+        data_type: varchar
+        description: ""
+
+      - name: stage_name
+        data_type: varchar
+        description: ""
+
+      - name: stage_sort_order
+        data_type: bigint
+        description: ""
+
+      - name: amount
+        data_type: bigint
+        description: ""
+
+      - name: probability
+        data_type: bigint
+        description: ""
+
+      - name: expected_revenue
+        data_type: bigint
+        description: ""
+
+      - name: total_opportunity_quantity
+        data_type: varchar
+        description: ""
+
+      - name: close_date
+        data_type: timestamp
+        description: ""
+
+      - name: type
+        data_type: varchar
+        description: ""
+
+      - name: next_step
+        data_type: varchar
+        description: ""
+
+      - name: lead_source
+        data_type: varchar
+        description: ""
+
+      - name: is_closed
+        data_type: bigint
+        description: ""
+
+      - name: owner_id
+        data_type: varchar
+        description: ""
+
+      - name: contact_id
+        data_type: varchar
+        description: ""
+
+      - name: oppr_created_date
+        data_type: timestamp
+        description: ""
+
+      - name: oppr_created_by
+        data_type: varchar
+        description: ""
+
+      - name: oppr_modified_date
+        data_type: timestamp
+        description: ""
+
+      - name: oppr_modified_by
+        data_type: varchar
+        description: ""
+
+  - name: vw_int_price_book_entry
+    description: ""
+    columns:
+      - name: pricebook_entry_id
+        data_type: varchar
+        description: ""
+
+      - name: pricebook_id
+        data_type: varchar
+        description: ""
+
+      - name: product_id
+        data_type: varchar
+        description: ""
+
+      - name: unit_price
+        data_type: bigint
+        description: ""
+
+      - name: is_active
+        data_type: bigint
+        description: ""
+
+      - name: use_standard_price
+        data_type: bigint
+        description: ""
+
+      - name: created_date
+        data_type: timestamp
+        description: ""
+
+      - name: created_by
+        data_type: varchar
+        description: ""
+
+      - name: modified_date
+        data_type: timestamp
+        description: ""
+
+      - name: modified_by
+        data_type: varchar
+        description: ""
+
+      - name: is_deleted
+        data_type: bigint
+        description: ""
+
+      - name: is_archived
+        data_type: bigint
+        description: ""
+
+  - name: vw_int_product
+    description: ""
+    columns:
+      - name: product_id
+        data_type: varchar
+        description: ""
+
+      - name: name
+        data_type: varchar
+        description: ""
+
+      - name: product_code
+        data_type: varchar
+        description: ""
+
+      - name: product_type
+        data_type: varchar
+        description: ""
+
+      - name: product_class
+        data_type: varchar
+        description: ""
+
+      - name: product_description
+        data_type: varchar
+        description: ""
+
+      - name: is_active
+        data_type: bigint
+        description: ""
+
+      - name: prod_created_date
+        data_type: timestamp
+        description: ""
+
+      - name: prod_created_by
+        data_type: varchar
+        description: ""
+
+      - name: prod_modified_date
+        data_type: timestamp
+        description: ""
+
+      - name: prod_modified_by
+        data_type: varchar
+        description: ""
+
+      - name: external_data_sourceid
+        data_type: varchar
+        description: ""
+
+      - name: external_id
+        data_type: varchar
+        description: ""
+
+      - name: quantity_unit
+        data_type: varchar
+        description: ""
+
+      - name: is_deleted
+        data_type: bigint
+        description: ""
+
+      - name: is_archived
+        data_type: bigint
+        description: ""
+
+      - name: stock_keeping_unit
+        data_type: varchar
+        description: ""
+
+  - name: vw_int_user
+    description: ""
+    columns:
+      - name: user_id
+        data_type: varchar
+        description: ""
+
+      - name: contact_id
+        data_type: varchar
+        description: ""
+
+      - name: account_id
+        data_type: varchar
+        description: ""
+
+      - name: user_role_id
+        data_type: varchar
+        description: ""
+
+      - name: is_active
+        data_type: bigint
+        description: ""
+
+      - name: user_name
+        data_type: varchar
+        description: ""
+
+      - name: first_name
+        data_type: varchar
+        description: ""
+
+      - name: last_name
+        data_type: varchar
+        description: ""
+
+      - name: company_name
+        data_type: varchar
+        description: ""
+
+      - name: division
+        data_type: varchar
+        description: ""
+
+      - name: department
+        data_type: varchar
+        description: ""
+
+      - name: title
+        data_type: varchar
+        description: ""
+
+      - name: street
+        data_type: varchar
+        description: ""
+
+      - name: city
+        data_type: varchar
+        description: ""
+
+      - name: state
+        data_type: varchar
+        description: ""
+
+      - name: postalcode
+        data_type: varchar
+        description: ""
+
+      - name: country
+        data_type: varchar
+        description: ""
+
+      - name: phone
+        data_type: varchar
+        description: ""
+
+      - name: fax
+        data_type: varchar
+        description: ""
+
+      - name: mobilephone
+        data_type: varchar
+        description: ""
+
+      - name: alias
+        data_type: varchar
+        description: ""
+
+      - name: user_created_date
+        data_type: timestamp
+        description: ""
+
+      - name: user_created_by
+        data_type: varchar
+        description: ""
+
+      - name: user_modified_date
+        data_type: timestamp
+        description: ""
+
+      - name: user_modified_by
+        data_type: varchar
+        description: ""
+
+  - name: vw_int_user_role
+    description: ""
+    columns:
+      - name: user_role_id
+        data_type: varchar
+        description: ""
+
+      - name: role_name
+        data_type: varchar
+        description: ""
+
+      - name: rollup_description
+        data_type: varchar
+        description: ""
+
+      - name: opportunity_for_owner
+        data_type: varchar
+        description: ""
+
+      - name: case_access_for_accountowner
+        data_type: varchar
+        description: ""
+
+      - name: contact_access_foraccountowner
+        data_type: varchar
+        description: ""
+
+      - name: modified_date
+        data_type: timestamp
+        description: ""
+
+      - name: modified_date
+        data_type: varchar
+        description: ""
+
+      - name: system_modstamp
+        data_type: timestamp
+        description: ""
+
+      - name: portal_accountid
+        data_type: varchar
+        description: ""
+
+      - name: portal_type
+        data_type: varchar
+        description: ""
+
+      - name: portal_role
+        data_type: varchar
+        description: ""
+
+      - name: portal_account_ownerid
+        data_type: varchar
+        description: ""

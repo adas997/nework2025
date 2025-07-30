@@ -1,0 +1,10 @@
+snapshots:
+  - name: snaps_opportunity
+    relation: source('stg_source', 'opportunity')
+    description: "Snapshot Data for Opportunity"
+    config:
+      unique_key: opportunity_id
+      strategy: timestamp
+      updated_at: lastmodifieddate
+      hard_deletes: new_record
+      dbt_valid_to_current: "CAST(strptime('99991231', '%Y%m%d') AS DATE)"

@@ -1,0 +1,10 @@
+snapshots:
+  - name: snaps_account
+    relation: source('stg_source', 'account')
+    description: "Snapshot Data for Account"
+    config:
+      unique_key: account_id
+      strategy: timestamp
+      updated_at: lastmodifieddate
+      hard_deletes: new_record
+      dbt_valid_to_current: "CAST(strptime('99991231', '%Y%m%d') AS DATE)"

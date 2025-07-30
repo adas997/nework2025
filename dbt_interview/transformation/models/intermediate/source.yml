@@ -1,10 +1,13 @@
 sources:
   - name: stg_source
     schema: staging
+      
 
     tables:
       - name: account
-        identifier: stg_salesforce__account 
+        identifier: stg_salesforce__account
+        
+        
       - name: campaign
         identifier: stg_salesforce__campaign
       - name: contact
@@ -21,3 +24,15 @@ sources:
 
       - name: product
         identifier: stg_salesforce__product_2
+
+      - name: cases
+        identifier: stg_salesforce__case
+
+      - name: solution
+        identifier: stg_salesforce__solution 
+
+      - name: users
+        identifier: stg_salesforce__user
+
+      - name: users_role
+        identifier: stg_salesforce__user_role
