@@ -1,6 +1,6 @@
 {{ config(
     materialized = 'incremental',
-    unique_key = ['a.account_id',  'o.opportunity_id', 'co.contact_id', 'cs.case_id', 'p.product_id', 'pr.pricebook_entry_id', 'pr.pricebook_id' ],
+    unique_key = ['a.account_id', 'o.opportunity_id','co.contact_id','cs.case_id','p.product_id','pr.pricebook_entry_id','pr.pricebook_id' ],
     incremental_strategy = 'merge',
     post_hook = [
             """
@@ -16,31 +16,74 @@ with account_rec as
 (
     select *
      from {{ ref('vw_int_account') }}
+
+     {% if is_incremental() %}
+
+     where acc_modified_date > (select coalesce(max(acc.acc_modified_date),'1900-01-01') from {{this}} acc )
+
+
+     {% endif%}
 ),
 case_rec as
 (
     select *
     from {{ ref ('vw_int_case') }}
+
+    {% if is_incremental() %}
+
+     where case_modified_date > (select coalesce(max(case_modified_date),'1900-01-01') from {{this}}  )
+
+
+     {% endif%}
 ),
 opportunity_rec as 
 (
     select *
     from {{ ref ('vw_int_opportunity') }}
+
+     {% if is_incremental() %}
+
+     where oppr_modified_date > (select coalesce(max(oppr_modified_date),'1900-01-01') from {{this}}  )
+
+
+     {% endif%}
+
 ),
 contact_rec as
 (
     select * 
     from {{ ref ('vw_int_contact') }}
+
+    {% if is_incremental() %}
+
+     where con_modified_date > (select coalesce(max(con_modified_date),'1900-01-01') from {{this}}  )
+
+
+     {% endif%}
 ),
 prod_rec as 
 (
     select *
     from {{ ref ('vw_int_product') }}
+
+     {% if is_incremental() %}
+
+     where prod_modified_date > (select coalesce(max(prod_modified_date),'1900-01-01') from {{this}}  )
+
+
+     {% endif%}
 ),
 price_rec as 
 (
     select *
     from {{ ref ('vw_int_price_book_entry') }}
+
+     {% if is_incremental() %}
+
+     where price_modified_date > (select coalesce(max(price_modified_date),'1900-01-01') from {{this}}  )
+
+
+     {% endif%}
 )
 -- Surrogate Key
 select {{ dbt_utils.generate_surrogate_key
@@ -127,9 +170,21 @@ select {{ dbt_utils.generate_surrogate_key
    p.is_archived as is_prod_archived,
    p.is_active as is_prod_active,
    pr.is_archived as is_price_archived,
-   pr.is_active as is_price_active
+   pr.is_active as is_price_active,
 
--- Dates   
+-- Dates
+   a.acc_created_date,
+   a.acc_modified_date,
+   o.oppr_created_date,
+   o.oppr_modified_date,
+   cs.case_created_date,
+   cs.case_modified_date,
+   co.con_created_date,
+   co.con_modified_date,
+   p.prod_created_date,
+   p.prod_modified_date ,
+
+   current_date() as load_date
 
 from account_rec a 
 left join opportunity_rec o 
@@ -147,35 +202,6 @@ left join price_rec pr
 
 where 1=1
 
-{% if is_incremental() %}
-  and  (
-        a.acc_modified_date >= (select coalesce(max(ac.acc_modified_date),'1900-01-01') from {{this}} ac
-                            where ac.account_id = a.account_id
-                             )
-        OR 
-        o.oppr_modified_date >= (select coalesce(max(oc.oppr_modified_date),'1900-01-01') from {{this}} oc
-                            where oc.opportunity_id = a.opportunity_id
-                            )
-        OR 
-        co.con_modified_date >= (select coalesce(max(con.con_modified_date),'1900-01-01') from {{this}} con
-                            where co.contact_id = con.contact_id
-                            )
-        OR
-        cs.case_modified_date >= (select coalesce(max(csn.case_modified_date),'1900-01-01') from {{this}} csn
-                            where cs.case_id = csn.case_id
-                            )
-        OR
-        p.prod_modified_date >= (select coalesce(max(prod.prod_modified_date),'1900-01-01') from {{this}} prod
-                            where p.product_id = prod.product_id
-                            )
-
-        OR
-        pr.price_modified_date >= (select coalesce(max(pri.price_modified_date),'1900-01-01') from {{this}} pri
-                            where pr.pricebook_entry_id = pri.pricebook_entry_id
-                            )
-  )
-
-{% endif %}
 
 
 

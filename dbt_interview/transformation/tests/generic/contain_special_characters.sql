@@ -2,6 +2,6 @@
 
 select *
 from {{model}}
-where {{column_name}} like '%[!@#$%^&*()0-9]%'
+where REGEXP_MATCHES({{column_name}}, '^[a-zA-Z]+$')
 
 {% endtest %}

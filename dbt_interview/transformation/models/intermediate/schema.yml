@@ -25,6 +25,10 @@ models:
           - unique:
               config:
                 store_failures: true
+          
+          - contain_special_characters:
+              config:
+                store_failures: true
         data_type: varchar
         description: "Account Name"
 

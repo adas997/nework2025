@@ -27,9 +27,9 @@ select contact_id,
     reportstoid,
     email,
     title,
-    createddate as created_date,
-    createdbyid as created_by,
-    lastmodifieddate as modified_date,
-    lastmodifiedbyid as modified_by
+    createddate as con_created_date,
+    createdbyid as con_created_by,
+    lastmodifieddate as con_modified_date,
+    lastmodifiedbyid as con_modified_by
 from contact_data
 where 1 = 1
