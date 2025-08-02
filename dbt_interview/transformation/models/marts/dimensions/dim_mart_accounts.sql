@@ -1,7 +1,10 @@
 {{ config(
     materialized = 'incremental',
-    unique_key = ['a.account_id', 'o.opportunity_id','co.contact_id','cs.case_id','p.product_id','pr.pricebook_entry_id','pr.pricebook_id' ],
+    unique_key = ['account_id','contact_id' ],
     incremental_strategy = 'merge',
+    incremental_predicates = [
+      "DBT_INTERNAL_DEST.acc_modified_date > dateadd(day, -7, current_date)"
+    ],
     post_hook = [
             """
             insert into main.log_model_run_details
@@ -24,31 +27,6 @@ with account_rec as
 
      {% endif%}
 ),
-case_rec as
-(
-    select *
-    from {{ ref ('vw_int_case') }}
-
-    {% if is_incremental() %}
-
-     where case_modified_date > (select coalesce(max(case_modified_date),'1900-01-01') from {{this}}  )
-
-
-     {% endif%}
-),
-opportunity_rec as 
-(
-    select *
-    from {{ ref ('vw_int_opportunity') }}
-
-     {% if is_incremental() %}
-
-     where oppr_modified_date > (select coalesce(max(oppr_modified_date),'1900-01-01') from {{this}}  )
-
-
-     {% endif%}
-
-),
 contact_rec as
 (
     select * 
@@ -61,41 +39,14 @@ contact_rec as
 
      {% endif%}
 ),
-prod_rec as 
+final as
 (
-    select *
-    from {{ ref ('vw_int_product') }}
-
-     {% if is_incremental() %}
-
-     where prod_modified_date > (select coalesce(max(prod_modified_date),'1900-01-01') from {{this}}  )
-
-
-     {% endif%}
-),
-price_rec as 
-(
-    select *
-    from {{ ref ('vw_int_price_book_entry') }}
-
-     {% if is_incremental() %}
-
-     where price_modified_date > (select coalesce(max(price_modified_date),'1900-01-01') from {{this}}  )
-
-
-     {% endif%}
-)
 -- Surrogate Key
 select {{ dbt_utils.generate_surrogate_key
-          (['a.account_id',
-           'o.opportunity_id',
-           'co.contact_id',
-           'cs.case_id',
-           'p.product_id',
-           'pr.pricebook_entry_id',
-           'pr.pricebook_id'
+          (['a.account_id',           
+           'co.contact_id'
            ]) 
-          }} as acc_opp_con_case_prod_sk,
+          }} as acc_sk,
 -- account
 
     a.account_id,
@@ -112,15 +63,7 @@ select {{ dbt_utils.generate_surrogate_key
     a.shipping_postal_code,
     a.shipping_country,
 
--- opportunity
 
-    o.opportunity_id,
-    o.opportunity_name,
-    o.is_private,
-    o.opportunity_description,
-    o.stage_name,
-    o.probability,
-    o.opportunity_type,
 
 -- contact
    co.contact_id, 
@@ -134,73 +77,30 @@ select {{ dbt_utils.generate_surrogate_key
    co.fax,
    co.mobilephone,
 
--- case
-
-   cs.case_id,
-   cs.case_number,
-   cs.supplied_name,
-   cs.supplied_phone,
-   cs.supplied_email,
-   cs.supplied_company,
-   cs.case_type,
-   cs.case_status,
-   cs.case_reason,
-   cs.case_subject,
-
--- Prod
-
-   p.product_id,
-   p.product_code,
-   p.product_type,
-   p.product_class,
-   p.product_description,
-
---Price
-
-   pr.pricebook_entry_id,
-   pr.pricebook_id,
-
 -- DWH 
-   a.is_deleted as is_account_deleted,
-   o.is_deleted as is_opportunity_deleted,
+   a.is_deleted as is_account_deleted,   
    co.is_deleted as is_contact_deleted,
-   cs.is_deleted as is_case_deleted,
-   p.is_deleted as is_prod_deleted,
-   pr.is_deleted as is_price_deleted,
-   p.is_archived as is_prod_archived,
-   p.is_active as is_prod_active,
-   pr.is_archived as is_price_archived,
-   pr.is_active as is_price_active,
+   
 
 -- Dates
    a.acc_created_date,
-   a.acc_modified_date,
-   o.oppr_created_date,
-   o.oppr_modified_date,
-   cs.case_created_date,
-   cs.case_modified_date,
+   a.acc_modified_date,   
    co.con_created_date,
    co.con_modified_date,
-   p.prod_created_date,
-   p.prod_modified_date ,
+   
 
-   current_date() as load_date
+   current_date() as account_load_date
 
 from account_rec a 
-left join opportunity_rec o 
-   on (o.account_id = a.account_id)
+
 left join contact_rec co 
-   on (a.account_id = co.account_id 
-      and o.contact_id = co.contact_id )
-left join case_rec cs
-  on (cs.account_id = a.account_id
-      and cs.contact_id = co.contact_id)
-left join prod_rec p 
-  on (p.product_id = cs.product_id)
-left join price_rec pr 
-  on (p.product_id = pr.product_id)
+   on (a.account_id = co.account_id )
+
 
 where 1=1
+)
+select *
+ from final
 
 
 

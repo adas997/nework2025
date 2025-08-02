@@ -1,0 +1,66 @@
+models:
+  - name: dim_mart_products
+    description: ""
+    columns:
+      - name: prod_sk
+        data_type: varchar
+        tests: 
+          - primary_key:
+              tags: [critical]
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true    
+        description: "Surrogate Key , considered as Surrogate Key for the dimension"
+
+      - name: product_id
+        data_type: varchar
+        tests:
+          - not_null:
+              tags: [critical]
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_product')
+              field: product_id
+        description: "Product Id - Business key for Product"
+
+      - name: product_code
+        data_type: varchar
+        description: "Product Code"
+
+      - name: product_type
+        data_type: varchar
+        description: "Type of Product"
+
+      - name: product_class
+        data_type: varchar
+        description: "Class of the Product"
+
+      - name: product_description
+        data_type: varchar
+        description: "Description of Product"
+
+      - name: quantity_unit
+        data_type: varchar
+        description: "Unit of measurement for quantity"
+
+      
+
+      - name: prod_created_date
+        data_type: timestamp
+        description: "Date when the product was created"
+
+      - name: prod_modified_date
+        data_type: timestamp
+        description: "Date when the product was modified"
+
+      
+
+      - name: is_prod_deleted
+        data_type: bigint
+        description: "Checks if the Product is still active or not. 1-is not deleted 0- is deleted"

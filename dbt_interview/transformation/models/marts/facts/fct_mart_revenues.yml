@@ -1,0 +1,90 @@
+models:
+  - name: fct_mart_revenues
+    description: "Fact Table that contains aggregated measures from account and opportunity dimension"
+    columns:
+      - name: date_sk
+        tests:
+          - not_null:
+              tags: [critical]
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('dim_mart_date')
+              field: dim_date_sk
+        data_type: varchar
+        description: "account and opportunity load dates are hashed to get date surrogate key. This will be used to join to dim_date."
+
+      - name: account_id
+        data_type: varchar
+        tests:
+          - not_null:
+              tags: [critical]
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('dim_mart_account')
+              field: account_id
+        description: "Refers to account id in dim_mart_accounts"
+
+      - name: opportunity_id
+        data_type: varchar
+        tests:
+          - not_null:
+              tags: [critical]
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('dim_mart_opportunities')
+              field: opportunity_id
+        description: "Refers to opportunity id in dim_mart_opportunities"
+
+      - name: total_revenue_earned_usd
+        data_type: decimal(16,2)
+        tests:
+          - dbt_utils.at_least_one
+          - dbt_utils.not_constant
+          - negative_amount:
+              config:
+                store_failures: true
+        description: "total revenue earned in US dollars"
+
+      - name: total_opportunity_amount_usd
+        data_type: decimal(16,2)
+        tests:
+          - dbt_utils.at_least_one
+          - dbt_utils.not_constant
+          - negative_amount:
+              config:
+                store_failures: true
+        description: "total opportunity amount in US dollars"
+
+      - name: total_revenue_expected_usd
+        data_type: decimal(16,2)
+        tests:
+          - dbt_utils.at_least_one
+          - dbt_utils.not_constant
+          - negative_amount:
+              config:
+                store_failures: true
+        description: "total revenue expected in US dollars"
+
+      - name: average_probability
+        data_type: double
+        description: ""
+
+      - name: account_load_date
+        data_type: date
+        description: "Last account load date"
+
+      - name: opportunity_load_date
+        data_type: date
+        description: "last opportunity load date"

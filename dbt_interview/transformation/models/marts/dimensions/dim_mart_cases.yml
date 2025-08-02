@@ -1,0 +1,169 @@
+models:
+  - name: dim_mart_cases
+    description: ""
+    columns:
+      - name: case_sk
+        data_type: varchar
+        tests: 
+          - primary_key:
+              tags: [critical]
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true    
+        description: "Surrogate Key , considered as Surrogate Key for the dimension"
+
+      - name: case_id
+        data_type: varchar
+        tests:
+          - not_null:
+              tags: [critical]
+          - unique:
+              tags: [critical]
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_case')
+              field: case_id
+        description: "Case Id - Business key for Case"
+
+      - name: case_number
+        data_type: varchar
+        tests:
+          - dbt_utils.cardinality_equality:
+              field: case_number
+              to: ref('vw_int_case')
+        description: "Case Number"
+
+      - name: is_deleted
+        data_type: bigint
+        description: ""
+
+      - name: contact_id
+        data_type: varchar
+        tests:
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_contact')
+              field: contact_id
+        description: "Refers to vw_int_contact"
+
+      - name: account_id
+        data_type: varchar
+        tests:
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_account')
+              field: account_id
+
+      - name: asset_id
+        data_type: varchar
+        description: ""
+
+      - name: product_id
+        data_type: varchar
+        tests:
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_product')
+              field: product_id
+
+      - name: entitlement_id
+        data_type: varchar
+        description: ""
+
+      - name: source_id
+        data_type: varchar
+        description: "Source of Case"
+
+      - name: businesshours_id
+        data_type: varchar
+        description: "Business hours"
+
+      - name: parent_id
+        data_type: varchar
+        description: ""
+
+      - name: supplied_name
+        tests:
+          - contain_special_characters:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: "Name of the supplier"
+
+      - name: supplied_email
+        data_type: varchar
+        description: "Email of supplier"
+
+      - name: supplied_phone
+        data_type: varchar
+        description: "Supplier phone number"
+
+      - name: supplied_company
+        data_type: varchar
+        description: "Supplier Company"
+
+      - name: case_type
+        data_type: varchar
+        description: "Type of Case"
+
+      - name: case_status
+        data_type: varchar
+        description: "Case Status"
+
+      - name: case_reason
+        data_type: varchar
+        description: "Case Reason"
+
+      - name: case_origin
+        data_type: varchar
+        description: "Case Origin"
+
+      - name: case_subject
+        data_type: varchar
+        description: "Case Subject"
+
+      - name: priority
+        data_type: varchar
+        description: ""
+
+      - name: case_description
+        data_type: varchar
+        description: "Description of the case"
+
+      - name: stop_start_date
+        data_type: varchar
+        description: ""
+
+      - name: case_created_date
+        data_type: timestamp
+        description: "Date when the case was created"
+
+      - name: case_created_by
+        data_type: varchar
+        description: "Case created by"
+
+      - name: case_modified_date
+        data_type: timestamp
+        description: "Date when the case was modified"
+
+      - name: case_modified_by
+        data_type: varchar
+        description: "Case modified by"

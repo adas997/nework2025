@@ -1,0 +1,32 @@
+version: 2
+tests:
+
+  - name: check_is_flag
+    description: >
+      This is a generic test, which ensures the _is_deleted flag column values (in all the models)  should lie between 0 and 1
+      0 being false/no/N and 1 as true/yes/Y.Also ensures that the value cannot be in decimal, eg: .5, .25 etc
+
+  - name: contain_special_characters
+    description: >
+      This is a generic test, which ensures that the _name columns in the  model should not contain any 
+      numbers or special characters. The names could be in lower case or upper case .
+
+  - name: minprice_gt_maxfrice
+    description: >
+      This is a generic test, which ensures that min_unit_price > max_unit_price and min_use_standard_price > max_use_standard_price
+      in fct_mart_prod_price.
+
+  - name: negative_amount
+    description: >
+      This is a generic test, which ensures that amount column values in any of the models in the project
+      should not be negative.
+
+  - name: primary_key
+    description: >
+      This is a generic test, which marks a  column as a primary ket to the model.
+
+
+
+
+  
+

@@ -30,6 +30,10 @@ models:
         +materialized: table
       facts:
         +materialized: table
+      +tags: t_marts
+      +persist_docs:
+        relation: true
+        columns: true
       
       
     reporting:

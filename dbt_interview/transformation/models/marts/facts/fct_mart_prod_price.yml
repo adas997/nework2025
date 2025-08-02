@@ -1,0 +1,108 @@
+models:
+  - name: fct_mart_prod_price
+    description: ""
+    columns:
+      - name: date_sk
+        data_type: varchar
+        description: "To refer to date dimension"
+
+      - name: product_id
+        data_type: varchar
+        tests:
+          - not_null:
+              tags: [critical]
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('dim_mart_products')
+              field: product_id
+        description: ""
+
+      
+
+      - name: case_id
+        data_type: varchar
+        tests:
+          - not_null:
+              tags: [critical]
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('dim_mart_cases')
+              field: case_id
+        description: ""
+
+      - name: account_id
+        data_type: varchar
+        tests:
+          - dbt_utils.at_least_one
+        description: ""
+
+      - name: min_unit_price_usd
+        data_type: decimal(16,2)
+        tests:
+          - dbt_utils.at_least_one
+          - dbt_utils.not_constant
+          - negative_amount:
+              config:
+                store_failures: true
+          - minprice_gt_maxfrice:
+              field: max_unit_price_usd
+              config:
+                store_failures: true
+              
+        description: "Min Unit Price per product id, account id , case id"
+
+      - name: max_unit_price_usd
+        data_type: decimal(16,2)
+        tests:
+          - dbt_utils.at_least_one
+          - dbt_utils.not_constant
+          - negative_amount:
+              config:
+                store_failures: true
+        description: "Max Unit Price per product id, account id , case id"
+
+      - name: min_use_standard_price_usd
+        data_type: decimal(16,2)
+        tests:
+          - dbt_utils.at_least_one
+          - dbt_utils.not_constant
+          - negative_amount:
+              config:
+                store_failures: true
+          - minprice_gt_maxfrice:
+              field: max_unit_price_usd
+              config:
+                store_failures: true
+        description: "Min Standard Price per product id, account id , case id"
+
+      - name: max_use_standard_price_usd
+        data_type: decimal(16,2)
+        tests:
+          - dbt_utils.at_least_one
+          - dbt_utils.not_constant
+          - negative_amount:
+              config:
+                store_failures: true
+        description: "Max Standard Price per product id, account id , case id"
+
+      - name: total_unit_price_usd
+        data_type: decimal(16,2)
+        tests:
+          - dbt_utils.at_least_one
+          - dbt_utils.not_constant
+          - negative_amount:
+              config:
+                store_failures: true
+        description: "Total Unit price"
+
+      - name: prod_load_date
+        data_type: date
+        description: "Date when Product data was last loaded in this dimension"

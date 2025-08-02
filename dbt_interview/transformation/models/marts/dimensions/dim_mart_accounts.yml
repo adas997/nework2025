@@ -30,10 +30,14 @@ models:
 
       - name: parent_id
         data_type: varchar
-        description: ""
+        description: "Parent ID"
 
       - name: account_type
         data_type: varchar
+        tests:
+          - dbt_utils.cardinality_equality:
+              field: account_type
+              to: ref('vw_int_account')
         description: "Account Types"
 
       - name: billing_street
@@ -76,46 +80,7 @@ models:
         data_type: varchar
         description: "Account Shipping Country"
 
-      - name: opportunity_id
-        tests:
-          - relationships:
-              config:
-                severity: error 
-                error_if: ">100"
-                warn_if: ">10" 
-                store_failures: true
-              to: ref('vw_int_opportunity')
-              field: opportunity_id
-        data_type: varchar
-        description: "Opportunity id - - Business key for Opportunity"
-
-      - name: opportunity_name
-        tests:
-          - contain_special_characters:
-              config:
-                store_failures: true
-        data_type: varchar
-        description: "Opportunity Name"
-
-      - name: is_private
-        data_type: varchar
-        description: "Checks if private"
-
-      - name: opportunity_description
-        data_type: varchar
-        description: "Opportunity Description"
-
-      - name: stage_name
-        data_type: varchar
-        description: "Name of the Stage"
-
-      - name: probability
-        data_type: bigint
-        description: ""
-
-      - name: opportunity_type
-        data_type: varchar
-        description: "Opportunity Type"
+      
 
       - name: contact_id
         tests:
@@ -174,104 +139,7 @@ models:
         data_type: varchar
         description: "Contact Phone Number"
 
-      - name: case_id
-        tests:
-          - relationships:
-              config:
-                severity: error 
-                error_if: ">100"
-                warn_if: ">10" 
-                store_failures: true
-              to: ref('vw_int_case')
-              field: case_id
-        data_type: varchar
-        description: "Case Id - Business key for Case"
-
-      - name: case_number
-        data_type: varchar
-        description: "Case Number"
-
-      - name: supplied_name
-        tests:
-          - contain_special_characters:
-              config:
-                store_failures: true
-        data_type: varchar
-        description: "Name of Supplier"
-
-      - name: supplied_phone
-        data_type: varchar
-        description: "Phone of Supplier"
-
-      - name: supplied_email
-        data_type: varchar
-        description: "Email of Supplier"
-
-      - name: supplied_company
-        data_type: varchar
-        description: "Company of Supplier"
-
-      - name: case_type
-        data_type: varchar
-        description: "Type of Case"
-
-      - name: case_status
-        data_type: varchar
-        description: "Status of Case"
-
-      - name: case_reason
-        data_type: varchar
-        description: "Reason for the Case"
-
-      - name: case_subject
-        data_type: varchar
-        description: "Subject of the Case"
-
-      - name: product_id
-        tests:
-          - relationships:
-              config:
-                severity: error 
-                error_if: ">100"
-                warn_if: ">10" 
-                store_failures: true
-              to: ref('vw_int_product')
-              field: product_id
-        data_type: varchar
-        description: "Product Id - Business key for Product"
-
-      - name: product_code
-        data_type: varchar
-        description: "Product Code"
-
-      - name: product_type
-        data_type: varchar
-        description: "Type of Product"
-
-      - name: product_class
-        data_type: varchar
-        description: "Class of the Product"
-
-      - name: product_description
-        data_type: varchar
-        description: "Description of Product"
-
-      - name: pricebook_entry_id
-        tests:
-          - relationships:
-              config:
-                severity: error 
-                error_if: ">100"
-                warn_if: ">10" 
-                store_failures: true
-              to: ref('vw_int_price_book_entry')
-              field: pricebook_entry_id
-        data_type: varchar
-        description: "Price Book Identifier"
-
-      - name: pricebook_id
-        data_type: varchar
-        description: ""
+      
 
       - name: is_account_deleted
         tests:
@@ -281,13 +149,7 @@ models:
         data_type: bigint
         description: ""
 
-      - name: is_opportunity_deleted
-        tests:
-          - check_is_flag:
-              config:
-                store_failures: true
-        data_type: bigint
-        description: ""
+      
 
       - name: is_contact_deleted
         tests:
@@ -297,62 +159,22 @@ models:
         data_type: bigint
         description: ""
 
-      - name: is_case_deleted
-        tests:
-          - check_is_flag:
-              config:
-                store_failures: true
-        data_type: bigint
-        description: ""
-
-      - name: is_prod_deleted
-        tests:
-          - check_is_flag:
-              config:
-                store_failures: true
-        data_type: bigint
-        description: ""
-
-      - name: is_price_deleted
-        tests:
-          - check_is_flag:
-              config:
-                store_failures: true
-        data_type: bigint
-        description: ""
-
-      - name: is_prod_archived
-        tests:
-          - check_is_flag:
-              config:
-                store_failures: true
-        data_type: bigint
-        description: ""
-
-      - name: is_prod_active
-        tests:
-          - check_is_flag:
-              config:
-                store_failures: true
-        data_type: bigint
-        description: ""
-
-      - name: is_price_archived
-        tests:
-          - check_is_flag:
-              config:
-                store_failures: true
-        data_type: bigint
-        description: ""
-
-      - name: is_price_active
-        tests:
-          - check_is_flag:
-              config:
-                store_failures: true
-        data_type: bigint
-        description: ""
-
-      - name: load_date
+      - name: acc_created_date
         data_type: timestamp
-        description: "Date when Data gets loaded into the dimension"
+        description: "Date when the account was created"
+
+      - name: acc_modified_date
+        data_type: timestamp
+        description: "Date when the account was modified"
+
+      - name: con_modified_date
+        data_type: timestamp
+        description: "Date when the contact was modified"
+
+      - name: con_created_date
+        data_type: timestamp
+        description: "Date when the contact was created"   
+
+      - name: account_load_date
+        data_type: timestamp
+        description: "Date when Data gets loaded into the Account dimension"

@@ -327,39 +327,39 @@ models:
                 store_failures: true
         
         data_type: varchar
-        description: ""
+        description: "Name of the supplier"
 
       - name: supplied_email
         data_type: varchar
-        description: ""
+        description: "Email of supplier"
 
       - name: supplied_phone
         data_type: varchar
-        description: ""
+        description: "Supplier phone number"
 
       - name: supplied_company
         data_type: varchar
-        description: ""
+        description: "Supplier Company"
 
       - name: type
         data_type: varchar
-        description: ""
+        description: "Type of Case"
 
       - name: status
         data_type: varchar
-        description: ""
+        description: "Case Status"
 
       - name: reason
         data_type: varchar
-        description: ""
+        description: "Case Reason"
 
       - name: origin
         data_type: varchar
-        description: ""
+        description: "Case Origin"
 
       - name: subject
         data_type: varchar
-        description: ""
+        description: "Case Subject"
 
       - name: priority
         data_type: varchar

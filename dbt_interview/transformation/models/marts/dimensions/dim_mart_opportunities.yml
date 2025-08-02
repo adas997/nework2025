@@ -1,0 +1,72 @@
+models:
+  - name: dim_mart_opportunities
+    description: "Dimension that lists the descriptive attributes for opportunity. opportunity_sk is hashed and is treated as the Surrogate Key ! "
+    columns:
+      - name: opportunity_sk
+        data_type: varchar
+        tests: 
+          - primary_key:
+              tags: [critical]
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true    
+        description: "Surrogate Key , considered as Surrogate Key for the dimension"
+
+      - name: opportunity_id
+        data_type: varchar
+        tests:
+          - not_null:
+              tags: [critical]
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_opportunity')
+              field: opportunity_id
+        description: "Opportunity id - - Business key for Opportunity"
+
+      - name: opportunity_name
+        data_type: varchar
+        tests:
+          - not_null:
+              tags: [critical]
+          - contain_special_characters:
+              config:
+                store_failures: true
+        description: "Opportunity Name"
+
+      - name: is_private
+        data_type: varchar
+        description: "Checks Opportunity is private or public"
+
+      - name: opportunity_description
+        data_type: varchar
+        description: "Opportunity Description"
+
+      - name: stage_name        
+        data_type: varchar
+        description: "Name of the Stage"
+
+      - name: probability
+        data_type: bigint
+        description: ""
+
+      - name: opportunity_type
+        data_type: varchar
+        description: "Opportunity Type"
+
+      - name: is_opportunity_deleted
+        data_type: bigint
+        description: "Checks if the opportunity is still active or deleted. 1-is not deleted 0- is deleted"
+
+      - name: oppr_created_date
+        data_type: timestamp
+        description: "Date when the opportunity was created"
+
+      - name: oppr_modified_date
+        data_type: timestamp
+        description: "Date when the opportunity was modified"
