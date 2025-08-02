@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: vw_int_account
-    description: "Intermediate Table to Hold account information"
+    description: "Intermediate Table to Hold account information. View Created on Staging account table , does renaming of columns and light weight transformations "
     tests :
       - dbt_utils.equal_rowcount:
           compare_model: ref('stg_salesforce_account')
@@ -103,7 +103,7 @@ models:
 
       - name: fax
         data_type: varchar
-        description: ""
+        description: "Fax Number"
 
       - name: account_number
         data_type: varchar
@@ -120,11 +120,11 @@ models:
                 store_failures: true
 
         data_type: bigint
-        description: ""
+        description: "Annual Revenue Earned"
 
       - name: number_employees
         data_type: bigint
-        description: ""
+        description: "Number of Employees"
 
       - name: acc_created_date
         data_type: timestamp
@@ -143,7 +143,7 @@ models:
         description: ""
 
   - name: vw_int_campaign
-    description: "Holds Campaign Information"
+    description: "Holds Campaign Information. View Created on Staging Campaign  , does renaming of columns and light weight transformations  "
     tests :
       - dbt_utils.equal_rowcount:
           compare_model: ref('stg_salesforce_campaign')
@@ -192,31 +192,31 @@ models:
 
       - name: campaign_start_date
         data_type: timestamp
-        description: ""
+        description: "Campaign Start Date"
 
       - name: campaign_end_date
         data_type: timestamp
-        description: ""
+        description: "Campaign Start Date"
 
       - name: campaign_revenue
         data_type: bigint
-        description: ""
+        description: "Campaign Revenue"
 
       - name: campaign_budget
         data_type: bigint
-        description: ""
+        description: "Campaign Budget"
 
       - name: campaign_actual_cost
         data_type: bigint
-        description: ""
+        description: "Campaign Actual Cost"
 
       - name: campaign_description
         data_type: varchar
-        description: ""
+        description: "Campaign Description"
 
       - name: campaign_owner
         data_type: varchar
-        description: ""
+        description: "Campaign Owner"
 
       - name: cmp_created_date
         data_type: timestamp
@@ -235,7 +235,7 @@ models:
         description: ""
 
   - name: vw_int_case
-    description: ""
+    description: "View created on  Staging Case  , does renaming of columns and light weight transformations"
     tests :
       - dbt_utils.equal_rowcount:
           compare_model: ref('stg_salesforce_case')
@@ -272,7 +272,7 @@ models:
               to: ref('vw_int_contact')
               field: contact_id
         data_type: varchar
-        description: ""
+        description: "References Contact "
 
       - name: account_id
         tests:
@@ -285,11 +285,11 @@ models:
               to: ref('vw_int_account')
               field: account_id
         data_type: varchar
-        description: ""
+        description: "References Account"
 
       - name: asset_id
         data_type: varchar
-        description: ""
+        description: "Asset identifier"
 
       - name: product_id
         tests:
@@ -302,23 +302,23 @@ models:
               to: ref('vw_int_product')
               field: product_id
         data_type: varchar
-        description: ""
+        description: "References Product"
 
       - name: entitlement_id
         data_type: varchar
-        description: ""
+        description: "Entitlement identifier"
 
       - name: source_id
         data_type: varchar
-        description: ""
+        description: "Source identifier"
 
       - name: businesshours_id
         data_type: varchar
-        description: ""
+        description: "Business Hours Identifier"
 
       - name: parent_id
         data_type: varchar
-        description: ""
+        description: "Parent identifier"
 
       - name: supplied_name
         tests:
@@ -363,11 +363,11 @@ models:
 
       - name: priority
         data_type: varchar
-        description: ""
+        description: "Case Priority"
 
       - name: description
         data_type: varchar
-        description: ""
+        description: "Case Description"
 
       - name: stop_start_date
         data_type: varchar
@@ -375,22 +375,22 @@ models:
 
       - name: case_created_date
         data_type: timestamp
-        description: ""
+        description: "Case Created on "
 
       - name: case_created_by
         data_type: varchar
-        description: ""
+        description: "Case Created by "
 
       - name: case_modified_date
         data_type: timestamp
-        description: ""
+        description: "Case Modified on "
 
       - name: case_modified_by
         data_type: varchar
-        description: ""
+        description: "Case Modified by "
 
   - name: vw_int_contact
-    description: ""
+    description: "Holds Contact Information. View Created on Staging Contact  , does renaming of columns and light weight transformations  " 
     columns:
       - name: contact_id
         tests:
@@ -402,7 +402,7 @@ models:
                 warn_if: ">10" 
                 store_failures: true 
         data_type: varchar
-        description: ""
+        description: "Primary Key"
 
       - name: account_id
         tests:
@@ -415,11 +415,11 @@ models:
               to: ref('vw_int_account')
               field: account_id
         data_type: varchar
-        description: ""
+        description: "References account"
 
       - name: salutation
         data_type: varchar
-        description: ""
+        description: "Salutation"
 
       - name: first_name
         tests:
@@ -430,7 +430,7 @@ models:
                 warn_if: ">20"
                 store_failures: true
         data_type: varchar
-        description: ""
+        description: "First Name of Contact"
 
       - name: last_name
         tests:
@@ -441,23 +441,23 @@ models:
                 warn_if: ">20"
                 store_failures: true
         data_type: varchar
-        description: ""
+        description: "Last Name of Contact"
 
       - name: other_street
         data_type: varchar
-        description: ""
+        description: "Street"
 
       - name: other_city
         data_type: varchar
-        description: ""
+        description: "City"
 
       - name: other_state
         data_type: varchar
-        description: ""
+        description: "State"
 
       - name: other_country
         data_type: varchar
-        description: ""
+        description: "Country"
 
       - name: other_postal_code
         data_type: bigint
@@ -465,47 +465,47 @@ models:
 
       - name: mailing_street
         data_type: varchar
-        description: ""
+        description: "Mailing Street"
 
       - name: mailing_city
         data_type: varchar
-        description: ""
+        description: "Mailing City"
 
       - name: mailing_state
         data_type: varchar
-        description: ""
+        description: "Mailing State"
 
       - name: mailing_postal_code
         data_type: bigint
-        description: ""
+        description: "Mailing Postal Code"
 
       - name: mailing_country
         data_type: varchar
-        description: ""
+        description: "Mailing Country"
 
       - name: phone
         data_type: varchar
-        description: ""
+        description: "Phone"
 
       - name: fax
         data_type: varchar
-        description: ""
+        description: "Fax"
 
       - name: mobilephone
         data_type: varchar
-        description: ""
+        description: "Mobile Phone"
 
       - name: homephone
         data_type: varchar
-        description: ""
+        description: "Home Phone"
 
       - name: otherphone
         data_type: varchar
-        description: ""
+        description: "Other Phone"
 
       - name: assistantphone
         data_type: varchar
-        description: ""
+        description: "Assistant Phone"
 
       - name: reportstoid
         data_type: varchar
@@ -513,27 +513,27 @@ models:
 
       - name: email
         data_type: varchar
-        description: ""
+        description: "Email"
 
       - name: title
         data_type: varchar
-        description: ""
+        description: "Title"
 
       - name: con_created_date
         data_type: timestamp
-        description: ""
+        description: "Contact Created on"
 
       - name: con_created_by
         data_type: varchar
-        description: ""
+        description: "Contact Created by"
 
       - name: con_modified_date
         data_type: timestamp
-        description: ""
+        description: "Contact Modifed on"
 
       - name: con_modified_by
         data_type: varchar
-        description: ""
+        description: "Contact Modified by"
 
   - name: vw_int_opportunity
     description: ""

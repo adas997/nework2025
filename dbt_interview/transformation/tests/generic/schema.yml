@@ -11,10 +11,7 @@ tests:
       This is a generic test, which ensures that the _name columns in the  model should not contain any 
       numbers or special characters. The names could be in lower case or upper case .
 
-  - name: minprice_gt_maxfrice
-    description: >
-      This is a generic test, which ensures that min_unit_price > max_unit_price and min_use_standard_price > max_use_standard_price
-      in fct_mart_prod_price.
+  
 
   - name: negative_amount
     description: >

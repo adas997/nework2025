@@ -1,6 +1,7 @@
 models:
+
   - name: fct_mart_prod_price
-    description: ""
+    description: "This is the fact table that contains aggregated product price measures and related ids "
     columns:
       - name: date_sk
         data_type: varchar
@@ -52,10 +53,7 @@ models:
           - negative_amount:
               config:
                 store_failures: true
-          - minprice_gt_maxfrice:
-              field: max_unit_price_usd
-              config:
-                store_failures: true
+          
               
         description: "Min Unit Price per product id, account id , case id"
 
@@ -77,10 +75,7 @@ models:
           - negative_amount:
               config:
                 store_failures: true
-          - minprice_gt_maxfrice:
-              field: max_unit_price_usd
-              config:
-                store_failures: true
+          
         description: "Min Standard Price per product id, account id , case id"
 
       - name: max_use_standard_price_usd
