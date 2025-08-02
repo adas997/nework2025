@@ -8,26 +8,39 @@ models:
     columns:
       - name: account_id
         tests: 
-          - not_null:
+          - primary_key:
+              tags: [critical]
               config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
                 store_failures: true
-          - unique:
-              config:
-                store_failures: true
+          
         data_type: varchar
         description: "Account Id - Unique Identifier"
 
       - name: account_name
         tests:
           - not_null:
+              tags: [critical]
               config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
                 store_failures: true
           - unique:
+              tags: [critical]
               config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
                 store_failures: true
           
           - contain_special_characters:
               config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
                 store_failures: true
         data_type: varchar
         description: "Account Name"
@@ -137,11 +150,13 @@ models:
     columns:
       - name: campaign_id
         tests:
-          - not_null:
+
+          - primary_key:
+              tags: [critical]
               config:
-                store_failures: true
-          - unique:
-              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
                 store_failures: true
         data_type: varchar
         description: "Campaign Id - Unique identifier"
@@ -149,9 +164,11 @@ models:
       - name: campaign_name
         tests:
           - not_null:
+              tags: [critical]
               config:
                 store_failures: true
           - unique:
+              tags: [critical]
               config:
                 store_failures: true
         data_type: varchar
@@ -226,11 +243,12 @@ models:
     columns:
       - name: case_id
         tests:
-          - unique:
+          - primary_key:
+              tags: [critical]
               config:
-                store_failures: true
-          - not_null:
-              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
                 store_failures: true
         data_type: varchar
         description: "Unique Identifier for Case"
@@ -376,8 +394,13 @@ models:
     columns:
       - name: contact_id
         tests:
-          - not_null 
-          - unique 
+          - primary_key:
+              tags: [critical]
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true 
         data_type: varchar
         description: ""
 
@@ -402,6 +425,9 @@ models:
         tests:
           - contain_special_characters:
               config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">20"
                 store_failures: true
         data_type: varchar
         description: ""
@@ -410,6 +436,9 @@ models:
         tests:
           - contain_special_characters:
               config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">20"
                 store_failures: true
         data_type: varchar
         description: ""
@@ -510,10 +539,26 @@ models:
     description: ""
     columns:
       - name: opportunity_id
+        tests:
+          - primary_key:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true 
         data_type: varchar
         description: ""
 
       - name: account_id
+        tests:
+          - relationships:
+              config: 
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10"
+                store_failures: true
+              to: ref('vw_int_account')
+              field: account_id
         data_type: varchar
         description: ""
 
@@ -582,6 +627,15 @@ models:
         description: ""
 
       - name: contact_id
+        tests:
+          - relationships:
+              config: 
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10"
+                store_failures: true
+              to: ref('vw_int_contact')
+              field: contact_id
         data_type: varchar
         description: ""
 
@@ -605,6 +659,13 @@ models:
     description: ""
     columns:
       - name: pricebook_entry_id
+        tests:
+          - primary_key:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
         data_type: varchar
         description: ""
 
@@ -613,10 +674,27 @@ models:
         description: ""
 
       - name: product_id
+        tests:
+          - relationships:
+              config: 
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10"
+                store_failures: true
+              to: ref('vw_int_product')
+              field: product_id
         data_type: varchar
         description: ""
 
       - name: unit_price
+        tests:
+          - negative_amount:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+
         data_type: bigint
         description: ""
 
@@ -625,6 +703,13 @@ models:
         description: ""
 
       - name: use_standard_price
+        tests:
+          - negative_amount:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
         data_type: bigint
         description: ""
 
@@ -656,6 +741,13 @@ models:
     description: ""
     columns:
       - name: product_id
+        tests:
+          - primary_key:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
         data_type: varchar
         description: ""
 
@@ -727,18 +819,52 @@ models:
     description: ""
     columns:
       - name: user_id
+        tests:
+          - primary_key:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
         data_type: varchar
         description: ""
 
       - name: contact_id
+        tests:
+          - relationships:
+              config: 
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10"
+                store_failures: true
+              to: ref('vw_int_contact')
+              field: contact_id
         data_type: varchar
         description: ""
 
       - name: account_id
+        tests:
+          - relationships:
+              config: 
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10"
+                store_failures: true
+              to: ref('vw_int_account')
+              field: account_id
         data_type: varchar
         description: ""
 
       - name: user_role_id
+        tests:
+          - relationships:
+              config: 
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10"
+                store_failures: true
+              to: ref('vw_int_user_role')
+              field: user_role_id
         data_type: varchar
         description: ""
 

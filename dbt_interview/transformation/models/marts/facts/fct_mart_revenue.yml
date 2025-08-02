@@ -1,0 +1,67 @@
+models:
+  - name: fct_mart_revenue
+    description: ""
+    columns:
+      - name: date_sk
+        data_type: varchar
+        description: ""
+
+      - name: acc_opp_con_case_prod_sk
+        data_type: varchar
+        description: ""
+
+      - name: account_id
+        data_type: varchar
+        description: ""
+
+      - name: opportunity_id
+        data_type: varchar
+        description: ""
+
+      - name: contact_id
+        data_type: varchar
+        description: ""
+
+      - name: case_id
+        data_type: varchar
+        description: ""
+
+      - name: product_id
+        data_type: varchar
+        description: ""
+
+      - name: pricebook_id
+        data_type: varchar
+        description: ""
+
+      - name: total_revenue_earned_usd
+        data_type: decimal(16,2)
+        description: ""
+
+      - name: total_opportunity_amount_usd
+        data_type: decimal(16,2)
+        description: ""
+
+      - name: total_revenue_earned_usd_1
+        data_type: decimal(16,2)
+        description: ""
+
+      - name: average_probability
+        data_type: double
+        description: ""
+
+      - name: min_unit_price_usd
+        data_type: decimal(16,2)
+        description: ""
+
+      - name: max_unit_price_usd
+        data_type: decimal(16,2)
+        description: ""
+
+      - name: min_use_standard_price_usd
+        data_type: decimal(16,2)
+        description: ""
+
+      - name: min_use_standard_price_usd_1
+        data_type: decimal(16,2)
+        description: ""

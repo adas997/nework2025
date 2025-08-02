@@ -1,0 +1,162 @@
+models:
+  - name: dim_mart_users
+    description: "Dimension that Contains User and User Roles decriptive attributes and their Ids"
+    columns:
+      - name: user_sk
+        tests: 
+          - primary_key:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+        data_type: varchar
+        description: "Hash - Surrogate Key in User Table, considered as primary key for this dimension table"
+
+      - name: user_id
+        tests:
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_user')
+              field: user_id
+        data_type: varchar
+        description: "Business Key for User"
+
+      - name: contact_id
+        tests:
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_contact')
+              field: contact_id
+        data_type: varchar
+        description: "Foreign key - Links to Contact"
+
+      - name: account_id
+        tests:
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_account')
+              field: account_id
+        data_type: varchar
+        description: "Foreign key - Links to Account"
+
+      - name: user_role_id
+        tests:
+          - relationships:
+              config:
+                severity: error 
+                error_if: ">100"
+                warn_if: ">10" 
+                store_failures: true
+              to: ref('vw_int_user_role')
+              field: user_role_id
+        data_type: varchar
+        description: "Foreign key - Links to User Role"
+
+      - name: user_name
+        data_type: varchar
+        description: "Name of the user"
+
+      - name: role_name
+        data_type: varchar
+        description: "Role Name"
+
+      - name: rollup_description
+        data_type: varchar
+        description: "Role Description"
+
+      - name: first_name
+        tests:
+          - contain_special_characters:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: "First Name of the user"
+
+      - name: last_name
+        tests:
+          - contain_special_characters:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: "Last Name of the user"
+
+      - name: company_name
+        data_type: varchar
+        description: "Company Name of the user"
+
+      - name: division
+        data_type: varchar
+        description: ""
+
+      - name: department
+        data_type: varchar
+        description: "Department Name of the user"
+
+      - name: title
+        data_type: varchar
+        description: ""
+
+      - name: street
+        data_type: varchar
+        description: ""
+
+      - name: city
+        tests:
+          - contain_special_characters:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: ""
+
+      - name: state
+        tests:
+          - contain_special_characters:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: ""
+
+      - name: postalcode
+        data_type: varchar
+        description: ""
+
+      - name: country
+        tests:
+          - contain_special_characters:
+              config:
+                store_failures: true
+        data_type: varchar
+        description: ""
+
+      - name: phone
+        data_type: varchar
+        description: ""
+
+      - name: fax
+        data_type: varchar
+        description: ""
+
+      - name: mobilephone
+        data_type: varchar
+        description: ""
+
+      - name: opportunity_for_owner
+        data_type: varchar
+        description: ""
+
+      - name: case_access_for_accountowner
+        data_type: varchar
+        description: ""

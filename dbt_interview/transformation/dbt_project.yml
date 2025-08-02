@@ -26,14 +26,15 @@ models:
     marts:
       +schema: marts
       +materialized: table
-      +tags: t_marts
-      +persist_docs:
-        relation: true
-        columns: true
-      +hours_to_expiration: 168 
+      dimensions:
+        +materialized: table
+      facts:
+        +materialized: table
+      
+      
     reporting:
       +schema: reporting
-      +materialized: table
+      +materialized: view
     staging:
       +schema: staging
       +materialized: view
