@@ -1,6 +1,6 @@
 models:
   - name: dim_mart_products
-    description: 'doc{{"dim_mart_products__"}}'
+    description:   '{{ doc("dim_mart_products__") }}'
     columns:
       - name: prod_sk
         data_type: varchar

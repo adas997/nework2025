@@ -1,0 +1,15 @@
+models:
+  - name: log_model_run_details
+    description: '{{ doc("log_model_run_details__") }}'
+    columns:
+      - name: model_name
+        data_type: varchar
+        description: "This Captures the name of the model ran"
+
+      - name: run_time
+        data_type: timestamp
+        description: "Time of Execution"
+
+      - name: row_count
+        data_type: bigint
+        description: "Number of records in the table"

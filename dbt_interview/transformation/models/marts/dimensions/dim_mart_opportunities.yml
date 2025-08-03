@@ -1,6 +1,6 @@
 models:
   - name: dim_mart_opportunities
-    description: 'doc{{"dim_mart_opportunities__"}}'
+    description:   '{{ doc("dim_mart_opportunities__") }}'
     columns:
       - name: opportunity_sk
         data_type: varchar

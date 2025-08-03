@@ -1,6 +1,6 @@
 models:
   - name: fct_mart_revenues
-    description: 'doc{{"fct_mart_revenues__"}}'
+    description: '{{ doc("fct_mart_revenues__") }}'
     columns:
       - name: date_sk
         tests:

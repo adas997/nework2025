@@ -1,7 +1,7 @@
 models:
 
   - name: fct_mart_prod_price
-    description: 'doc{{"fct_mart_prod_price__"}}'
+    description: '{{ doc("fct_mart_prod_price__") }}'
     columns:
       - name: date_sk
         data_type: varchar
