@@ -1,6 +1,6 @@
 models:
   - name: dim_mart_accounts
-    description: "Dimension Table - Containing Account, Opportunity, Contact, Case, Product and Price descriptive attributes and corresponding IDs"
+    description: 'doc{{"dim_mart_accounts__"}}'
     
     columns:
       - name: acc_opp_con_case_prod_sk

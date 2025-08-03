@@ -1,6 +1,6 @@
 models:
   - name: fct_mart_revenues
-    description: "Fact Table that contains aggregated measures from account and opportunity dimension"
+    description: 'doc{{"fct_mart_revenues__"}}'
     columns:
       - name: date_sk
         tests:

@@ -1,6 +1,6 @@
 models:
   - name: dim_mart_opportunities
-    description: "Dimension that lists the descriptive attributes for opportunity. opportunity_sk is hashed and is treated as the Surrogate Key ! "
+    description: 'doc{{"dim_mart_opportunities__"}}'
     columns:
       - name: opportunity_sk
         data_type: varchar
@@ -51,9 +51,7 @@ models:
         data_type: varchar
         description: "Name of the Stage"
 
-      - name: probability
-        data_type: bigint
-        description: ""
+      
 
       - name: opportunity_type
         data_type: varchar

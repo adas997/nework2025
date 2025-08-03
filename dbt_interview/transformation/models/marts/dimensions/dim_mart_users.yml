@@ -1,6 +1,6 @@
 models:
   - name: dim_mart_users
-    description: "Dimension that Contains User and User Roles decriptive attributes and their Ids"
+    description: 'doc{{"dim_mart_users__"}}'
     columns:
       - name: user_sk
         tests: 
